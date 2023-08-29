@@ -2,6 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=python
 
 amrc_branch_locations.csv
+.DS_Store
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
