@@ -53,7 +53,7 @@ for url in list_urls:
                 
             output.append(temp_dict)
     else:
-        print(f"Failed to retrieve the webpage. Status code: {response.status_code}")
+        print(f"Couldn't find that branch page. Status code: {response.status_code}")
 
 if geocoding == True:
     # add your google maps key to a local .env file with key labeled: GOOGLE_MAPS
