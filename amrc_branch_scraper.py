@@ -1,6 +1,12 @@
 import requests
 from bs4 import BeautifulSoup
 import csv
+from dotenv import load_dotenv
+import os
+
+# add your google maps key to a local .env file with key labeled: GOOGLE_MAPS
+load_dotenv()
+google_maps_key = os.environ.get('GOOGLE_MAPS')
 
 list_urls = []
 csv_file_path = 'amrc_location_urls.csv'
@@ -9,10 +15,11 @@ with open(csv_file_path, 'r', newline='', encoding='utf-8-sig') as csv_file:
     for row in csv_reader:
         list_urls.extend(row)
 
+print("Beginning web scraping\n-------------\n")
+
 output = []
-
 for url in list_urls:
-
+    print(url)    
     response = requests.get(url)
     
     if response.status_code == 200:
@@ -47,8 +54,6 @@ for url in list_urls:
             output.append(temp_dict)
     else:
         print(f"Failed to retrieve the webpage. Status code: {response.status_code}")
-
-print(output)
 
 keys = output[0].keys()
 a_file = open("amrc_branch_locations.csv", "w")
