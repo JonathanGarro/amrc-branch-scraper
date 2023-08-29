@@ -1,12 +1,12 @@
 import requests
 from bs4 import BeautifulSoup
 import csv
+import googlemaps
 from dotenv import load_dotenv
 import os
 
-# add your google maps key to a local .env file with key labeled: GOOGLE_MAPS
-load_dotenv()
-google_maps_key = os.environ.get('GOOGLE_MAPS')
+# set to false if you don't want to set up geocoding, which requires a Google Maps API key
+geocoding = True
 
 list_urls = []
 csv_file_path = 'amrc_location_urls.csv'
@@ -15,7 +15,7 @@ with open(csv_file_path, 'r', newline='', encoding='utf-8-sig') as csv_file:
     for row in csv_reader:
         list_urls.extend(row)
 
-print("Beginning web scraping\n-------------\n")
+print("Beginning web scraping\n------------------\n")
 
 output = []
 for url in list_urls:
@@ -54,6 +54,27 @@ for url in list_urls:
             output.append(temp_dict)
     else:
         print(f"Failed to retrieve the webpage. Status code: {response.status_code}")
+
+if geocoding == True:
+    # add your google maps key to a local .env file with key labeled: GOOGLE_MAPS
+    load_dotenv()
+    google_maps_key = os.environ.get('GOOGLE_MAPS')
+    gmaps = googlemaps.Client(key=google_maps_key)
+    
+    print("Beginning geocoding process\n------------------\n")
+    
+    for place in output: 
+        joined_address = place['street'] + ' ' + place['city']
+        
+        temp_dict = {}
+        
+        geocode_result = gmaps.geocode(joined_address)
+        try:
+            place['lat'] = geocode_result[0]['geometry']['location']['lat']
+            place['lng'] = geocode_result[0]['geometry']['location']['lng']
+        except IndexError:
+            place['lat'] = 0
+            place['lng'] = 0
 
 keys = output[0].keys()
 a_file = open("amrc_branch_locations.csv", "w")
