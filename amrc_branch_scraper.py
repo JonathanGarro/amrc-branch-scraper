@@ -66,8 +66,6 @@ if geocoding == True:
     for place in output: 
         joined_address = place['street'] + ' ' + place['city']
         
-        temp_dict = {}
-        
         geocode_result = gmaps.geocode(joined_address)
         try:
             place['lat'] = geocode_result[0]['geometry']['location']['lat']
