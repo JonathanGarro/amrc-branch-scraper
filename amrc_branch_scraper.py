@@ -55,7 +55,7 @@ for url in list_urls:
     else:
         print(f"Couldn't find that branch page. Status code: {response.status_code}")
 
-if geocoding == True:
+if geocoding:
     # add your google maps key to a local .env file with key labeled: GOOGLE_MAPS
     load_dotenv()
     google_maps_key = os.environ.get('GOOGLE_MAPS')
